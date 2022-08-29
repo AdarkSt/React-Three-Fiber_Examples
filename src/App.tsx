@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Canvas } from '@react-three/fiber';
+import React, { useState } from 'react';
+import { Vector3 } from 'three';
 import './App.css';
+import Box from './components/Box';
+import CameraController from './components/CameraController';
 
 function App() {
+
+  const [rotationState, setRotationState] = useState(false)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div style={{width: '600px', height:'600px'}}>
+        <Canvas flat linear frameloop='demand' camera={{position: [0, 0, 10], fov: 75, near:0.01, far: 1000}}>
+          <CameraController/>
+          <perspectiveCamera/>
+          <Box position={new Vector3(-2,0,0)} geometryArgs={[2,2,2]} rotate={{rotationState: rotationState, axis: ['y', 'z']}}/>
+          <Box position={new Vector3(2,0,0)} geometryArgs={[2,2,2]} rotate={{rotationState: rotationState, axis: 'y'}}/>
+        </Canvas>
+      </div>
+      <button
+        onClick={():void => setRotationState(!rotationState)}
+      >
+          Toggle
+      </button>
+    </>
   );
 }
 
 export default App;
+
